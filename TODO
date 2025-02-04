@@ -1,5 +1,5 @@
 * implement hostr db
-** add ForeignKey
+** add ForeignKey actions from hostr
 ** add Index
 ** add Sequence
 ** add Record

@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 public class Table extends BaseDefinition implements Definition {
     private final List<Column> columns = new ArrayList<>();
+    private final List<ForeignKey> foreignKeys = new ArrayList<>();
     private Key primaryKey;
 
     public Table(final String name) {
@@ -16,6 +17,10 @@ public class Table extends BaseDefinition implements Definition {
 
     public final void add(final Column c) {
         columns.add(c);
+    }
+
+    public final void add(final ForeignKey k) {
+        foreignKeys.add(k);
     }
 
     @Override
@@ -53,9 +58,17 @@ public class Table extends BaseDefinition implements Definition {
             }
 
             primaryKey().migrate(cx);
+
+            for (final var k: foreignKeys) {
+                k.migrate(cx);
+            }
         } else {
             create(cx);
             primaryKey().create(cx);
+
+            for (final var k: foreignKeys) {
+                k.create(cx);
+            }
         }
     }
 

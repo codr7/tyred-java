@@ -22,6 +22,10 @@ public class BaseTableDefinition extends BaseDefinition {
         return options.contains(TableDefinition.Option.PrimaryKey);
     }
 
+    public Stream<TableDefinition.Option> options() {
+        return options.stream();
+    }
+
     public Table table() {
         return table;
     }

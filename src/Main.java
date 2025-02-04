@@ -1,8 +1,5 @@
-import codr7.frihda.Context;
-import codr7.frihda.Schema;
-import codr7.frihda.Table;
-import codr7.frihda.TableDefinition;
-import codr7.frihda.StringColumn;
+import codr7.frihda.*;
+import codr7.frihda.columns.StringColumn;
 
 import java.util.stream.Stream;
 
@@ -10,6 +7,9 @@ public class Main {
     static class DB extends Schema {
         final Table users = add(new Table("users"));
         final StringColumn userName = new StringColumn(users, "name", 100, Stream.of(TableDefinition.Option.PrimaryKey));
+
+        final Table admins = add(new Table("admins"));
+        final ForeignKey adminUserKey = new ForeignKey(admins, "user", users, Stream.of(TableDefinition.Option.PrimaryKey));
     }
 
     public static void main(final String[] args) {
@@ -21,7 +21,6 @@ public class Main {
 
         final var cx = new Context("frihda", "frihda", "frihda");
         final var db = new DB();
-
         db.migrate(cx);
     }
 }

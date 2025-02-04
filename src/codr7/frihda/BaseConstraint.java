@@ -1,6 +1,7 @@
 package codr7.frihda;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public abstract class BaseConstraint extends BaseTableDefinition implements Constraint {
@@ -11,7 +12,11 @@ public abstract class BaseConstraint extends BaseTableDefinition implements Cons
                           final Stream<Column> columns,
                           final Stream<Option> options) {
         super(table, name, options);
-        this.columns = columns.toList();
+        this.columns = new ArrayList<>(columns.toList());
+    }
+
+    public void add(final Column c) {
+        columns.add(c);
     }
 
     @Override
