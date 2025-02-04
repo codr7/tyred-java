@@ -1,4 +1,4 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 import java.util.ArrayList;
 import java.util.Collections;

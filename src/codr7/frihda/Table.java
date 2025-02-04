@@ -1,12 +1,14 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Table extends BaseDefinition implements Definition {
     private final List<Column> columns = new ArrayList<>();
+    private Key primaryKey;
 
     public Table(final String name) {
         super(name);
@@ -20,8 +22,8 @@ public class Table extends BaseDefinition implements Definition {
     public final String createSQL() {
         return Definition.super.createSQL() + " (" +
                 columns.stream().
-                        map(c -> c.name() + ' ' + c.columnType()).
-                        collect(Collectors.joining( " ")) +
+                        map(Column::createSQL).
+                        collect(Collectors.joining( ", ")) +
                 ')';
     }
 
@@ -49,8 +51,23 @@ public class Table extends BaseDefinition implements Definition {
             for (final var c: columns) {
                 c.migrate(cx);
             }
+
+            primaryKey().migrate(cx);
         } else {
             create(cx);
+            primaryKey().create(cx);
         }
+    }
+
+    public Key primaryKey() {
+        if (primaryKey == null) {
+            primaryKey = new Key(
+                    this,
+                    name() + "Key",
+                    columns.stream().filter(TableDefinition::isPrimaryKey),
+                    Stream.empty());
+        }
+
+        return primaryKey;
     }
 }

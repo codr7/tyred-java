@@ -1,6 +1,4 @@
 * implement hostr db
-** add Key
-*** add Table.primaryKey
 ** add ForeignKey
 ** add Index
 ** add Sequence

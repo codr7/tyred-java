@@ -1,4 +1,4 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 public interface Definition {
     default void create(final Context cx) {

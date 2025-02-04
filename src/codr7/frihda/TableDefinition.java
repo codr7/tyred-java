@@ -1,6 +1,11 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 public interface TableDefinition extends Definition {
+    enum Option {
+        Nullable,
+        PrimaryKey
+    }
+
     Table table();
 
     @Override
@@ -12,4 +17,7 @@ public interface TableDefinition extends Definition {
     default void drop(final Context cx) {
         cx.exec("ALTER TABLE " + SQL.quote(table().name()) + " DROP " + definitionType() + ' ' + SQL.quote(name()));
     }
+
+    boolean isNullable();
+    boolean isPrimaryKey();
 }

@@ -1,4 +1,4 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 import java.nio.file.Paths;
 import java.sql.*;

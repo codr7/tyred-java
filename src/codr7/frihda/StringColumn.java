@@ -1,14 +1,12 @@
-package codr7.frihda.db.columns;
+package codr7.frihda;
 
-import codr7.frihda.db.BaseColumn;
-import codr7.frihda.db.Table;
-import codr7.frihda.db.TypedColumn;
+import java.util.stream.Stream;
 
 public class StringColumn extends BaseColumn implements TypedColumn<String> {
     private final int size;
 
-    public StringColumn(Table table, String name, int size) {
-        super(table, name);
+    public StringColumn(final Table table, final String name, final int size, final Stream<Option> options) {
+        super(table, name, options);
         table.add(this);
         this.size = size;
     }

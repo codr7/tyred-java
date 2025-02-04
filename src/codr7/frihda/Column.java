@@ -1,4 +1,4 @@
-package codr7.frihda.db;
+package codr7.frihda;
 
 import java.sql.SQLException;
 
@@ -7,7 +7,9 @@ public interface Column extends TableDefinition {
 
     @Override
     default String createSQL() {
-        return TableDefinition.super.createSQL() + ' ' + columnType();
+        var sql = SQL.quote(name()) + ' ' + columnType();
+        if (!isNullable()) { sql += " NOT NULL"; }
+        return sql;
     }
 
     @Override
@@ -28,3 +30,4 @@ public interface Column extends TableDefinition {
         }
     }
 }
+
