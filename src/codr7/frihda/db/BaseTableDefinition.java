@@ -5,6 +5,7 @@ public class BaseTableDefinition extends BaseDefinition {
 
     public BaseTableDefinition(final Table table, final String name) {
         super(name);
+        this.table = table;
     }
 
     public Table table() {

@@ -2,6 +2,7 @@ package codr7.frihda.db;
 
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.Arrays;
 
 public class Context {
     private final Connection h2;
@@ -24,6 +25,8 @@ public class Context {
 
     public PreparedStatement prepare(final String sql, final Object...params) {
         try {
+            System.out.println(sql + '\n' + Arrays.toString(params));
+
             final var s = h2.prepareStatement(sql);
 
             for (var i = 0; i < params.length; i++) {

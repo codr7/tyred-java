@@ -9,6 +9,7 @@ public class StringColumn extends BaseColumn implements TypedColumn<String> {
 
     public StringColumn(Table table, String name, int size) {
         super(table, name);
+        table.add(this);
         this.size = size;
     }
 

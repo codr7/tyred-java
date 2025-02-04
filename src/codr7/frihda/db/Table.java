@@ -12,6 +12,10 @@ public class Table extends BaseDefinition implements Definition {
         super(name);
     }
 
+    public final void add(final Column c) {
+        columns.add(c);
+    }
+
     @Override
     public final String createSQL() {
         return Definition.super.createSQL() + " (" +
@@ -32,9 +36,21 @@ public class Table extends BaseDefinition implements Definition {
                 SELECT EXISTS
                 (SELECT FROM INFORMATION_SCHEMA.TABLES WHERE table_name = ?)
                 """, name())) {
-            return q.next();
+            q.next();
+            return q.getBoolean(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void migrate(final Context cx) {
+        if (exists(cx)) {
+            for (final var c: columns) {
+                c.migrate(cx);
+            }
+        } else {
+            create(cx);
         }
     }
 }
