@@ -1,15 +1,13 @@
 import codr7.frihda.*;
 import codr7.frihda.columns.StringColumn;
 
-import java.util.stream.Stream;
-
 public class Main {
     static class DB extends Schema {
         final Table users = add(new Table("users"));
-        final StringColumn userName = new StringColumn(users, "name", 100, Stream.of(TableDefinition.Option.PrimaryKey));
+        final StringColumn userName = new StringColumn(users, "name", 100, TableDefinition.Option.PrimaryKey);
 
         final Table admins = add(new Table("admins"));
-        final ForeignKey adminUserKey = new ForeignKey(admins, "user", users, Stream.of(TableDefinition.Option.PrimaryKey));
+        final ForeignKey adminUserKey = new ForeignKey(admins, "user", users, TableDefinition.Option.PrimaryKey);
     }
 
     public static void main(final String[] args) {

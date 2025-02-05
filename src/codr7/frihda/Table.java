@@ -77,8 +77,7 @@ public class Table extends BaseDefinition implements Definition {
             primaryKey = new Key(
                     this,
                     name() + "Key",
-                    columns.stream().filter(TableDefinition::isPrimaryKey),
-                    Stream.empty());
+                    columns.stream().filter(TableDefinition::isPrimaryKey));
         }
 
         return primaryKey;

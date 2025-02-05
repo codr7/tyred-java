@@ -3,7 +3,7 @@ package codr7.frihda;
 import java.util.stream.Stream;
 
 public class Key extends BaseConstraint implements Constraint {
-    public Key(final Table table, final String name, final Stream<Column> columns, final Stream<Option> options) {
+    public Key(final Table table, final String name, final Stream<Column> columns, final Option...options) {
         super(table, name, columns, options);
     }
 

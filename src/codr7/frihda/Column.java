@@ -18,7 +18,7 @@ public interface Column extends TableDefinition {
         return "COLUMN";
     }
 
-    Column dup(Table table, String name, Stream<Option> options);
+    Column dup(Table table, String name, Option...options);
 
     @Override
     default boolean exists(final Context cx) {

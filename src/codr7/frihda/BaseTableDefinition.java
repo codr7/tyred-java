@@ -6,12 +6,12 @@ import java.util.stream.Stream;
 
 public class BaseTableDefinition extends BaseDefinition {
     private final Set<Column.Option> options;
-    private Table table;
+    private final Table table;
 
-    public BaseTableDefinition(final Table table, final String name, final Stream<Column.Option> options) {
+    public BaseTableDefinition(final Table table, final String name, Column.Option...options) {
         super(name);
         this.table = table;
-        this.options = options.collect(Collectors.toSet());
+        this.options = Set.of(options);
     }
 
     public boolean isNullable() {

@@ -10,7 +10,7 @@ public abstract class BaseConstraint extends BaseTableDefinition implements Cons
     public BaseConstraint(final Table table,
                           final String name,
                           final Stream<Column> columns,
-                          final Stream<Option> options) {
+                          final Option...options) {
         super(table, name, options);
         this.columns = new ArrayList<>(columns.toList());
     }
