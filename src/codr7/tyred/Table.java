@@ -1,4 +1,4 @@
-package codr7.frihda;
+package codr7.tyred;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

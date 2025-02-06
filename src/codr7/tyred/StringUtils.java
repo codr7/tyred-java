@@ -1,4 +1,4 @@
-package codr7.frihda;
+package codr7.tyred;
 
 public final class StringUtils {
     public static String toNameCase(final String in) {

@@ -1,4 +1,4 @@
-package codr7.frihda;
+package codr7.tyred;
 
 public interface Definition {
     default void create(final Context cx) {

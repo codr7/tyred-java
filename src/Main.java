@@ -1,5 +1,5 @@
-import codr7.frihda.*;
-import codr7.frihda.columns.StringColumn;
+import codr7.tyred.*;
+import codr7.tyred.columns.StringColumn;
 
 public class Main {
     static class DB extends Schema {
