@@ -6,6 +6,11 @@ public interface TableColumn extends Column, TableDefinition {
     String columnType();
 
     @Override
+    default int compareTo(Column c) {
+        return name().compareTo(c.name());
+    }
+
+    @Override
     default String createSQL() {
         var sql = SQL.quote(name()) + ' ' + columnType();
         if (!isNullable()) { sql += " NOT NULL"; }
