@@ -24,7 +24,7 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         };
     }
 
-    private final List<Column> foreignColumns = new ArrayList<>();
+    private final List<TableColumn> foreignColumns = new ArrayList<>();
     private final Table foreignTable;
 
     private Action onDelete = Action.Restrict;

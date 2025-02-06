@@ -17,7 +17,7 @@ public final class StringColumn extends BaseColumn implements TypedColumn<String
     }
 
     @Override
-    public Column dup(Table table, String name, Option...options) {
+    public TableColumn dup(Table table, String name, Option...options) {
         return new StringColumn(table, name, size, options);
     }
 }

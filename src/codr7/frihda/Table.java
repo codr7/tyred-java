@@ -4,10 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Table extends BaseDefinition implements Definition {
-    private final List<Column> columns = new ArrayList<>();
+    private final List<TableColumn> columns = new ArrayList<>();
     private final List<ForeignKey> foreignKeys = new ArrayList<>();
     private Key primaryKey;
 
@@ -15,7 +14,7 @@ public class Table extends BaseDefinition implements Definition {
         super(name);
     }
 
-    public final void add(final Column c) {
+    public final void add(final TableColumn c) {
         columns.add(c);
     }
 
@@ -27,7 +26,7 @@ public class Table extends BaseDefinition implements Definition {
     public final String createSQL() {
         return Definition.super.createSQL() + " (" +
                 columns.stream().
-                        map(Column::createSQL).
+                        map(TableColumn::createSQL).
                         collect(Collectors.joining( ", ")) +
                 ')';
     }

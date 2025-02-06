@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface Constraint extends TableDefinition {
-    Stream<Column> columns();
+    Stream<TableColumn> columns();
     String constraintType();
 
     @Override

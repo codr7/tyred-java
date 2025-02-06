@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public abstract class BaseConstraint extends BaseTableDefinition implements Constraint {
-    private final List<Column> columns;
+    private final List<TableColumn> columns;
 
     public BaseConstraint(final Table table,
                           final String name,
-                          final Stream<Column> columns,
+                          final Stream<TableColumn> columns,
                           final Option...options) {
         super(table, name, options);
         this.columns = new ArrayList<>(columns.toList());
     }
 
-    public void add(final Column c) {
+    public void add(final TableColumn c) {
         columns.add(c);
     }
 
     @Override
-    public Stream<Column> columns() { return columns.stream(); }
+    public Stream<TableColumn> columns() { return columns.stream(); }
 }
