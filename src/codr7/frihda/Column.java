@@ -1,7 +1,6 @@
 package codr7.frihda;
 
 import java.sql.SQLException;
-import java.util.stream.Stream;
 
 public interface Column extends TableDefinition {
     String columnType();

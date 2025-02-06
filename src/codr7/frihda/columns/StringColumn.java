@@ -1,9 +1,6 @@
 package codr7.frihda.columns;
 
-import codr7.frihda.BaseColumn;
-import codr7.frihda.Column;
-import codr7.frihda.Table;
-import codr7.frihda.TypedColumn;
+import codr7.frihda.*;
 
 public final class StringColumn extends BaseColumn implements TypedColumn<String> {
     private final int size;

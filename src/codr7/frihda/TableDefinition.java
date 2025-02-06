@@ -1,10 +1,6 @@
 package codr7.frihda;
 
 public interface TableDefinition extends Definition {
-    enum Option {
-        Nullable,
-        PrimaryKey
-    }
 
     Table table();
 

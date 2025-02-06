@@ -14,6 +14,16 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         SetNull
     }
 
+    public static String toSQL(Action a) {
+        return switch (a) {
+            case Cascade -> "CASCADE";
+            case NoAction -> "NO ACTION";
+            case Restrict -> "RESTRICT";
+            case SetDefault -> "SET DEFAULT";
+            case SetNull -> "SET NULL";
+        };
+    }
+
     private final List<Column> foreignColumns = new ArrayList<>();
     private final Table foreignTable;
 
@@ -47,7 +57,7 @@ public class ForeignKey extends BaseConstraint implements Constraint {
                 foreignColumns.stream().
                         map(c -> SQL.quote(c.name())).
                         collect(Collectors.joining( ", ")) +
-                ')';
+                ") ON DELETE " + toSQL(onDelete) + " ON UPDATE " + toSQL(onUpdate);
     }
 
     public ForeignKey onDelete(final Action action) {
