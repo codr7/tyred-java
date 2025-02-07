@@ -1,4 +1,8 @@
 * implement hostr db
-** add Table insert/update
-** add Index
-** add Sequence
+** finish table insert/update
+**** add Condition
+***** use in update
+**** store values in cx
+*** fetch transaction stored value in context
+** add index support
+** add sequence support

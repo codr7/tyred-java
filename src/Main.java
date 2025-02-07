@@ -1,5 +1,6 @@
 import codr7.tyred.*;
 import codr7.tyred.columns.StringColumn;
+import codr7.tyred.Record;
 
 public class Main {
     static class DB extends Schema {
@@ -20,5 +21,9 @@ public class Main {
         final var cx = new Context("frihda", "frihda", "frihda");
         final var db = new DB();
         db.migrate(cx);
+
+        final var u = new Record();
+        u.set(db.userName, "foo");
+        db.users.insert(u, cx);
     }
 }

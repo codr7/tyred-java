@@ -46,4 +46,13 @@ public class Context {
             throw new RuntimeException(ex);
         }
     }
+
+    public void storeValue(final Record r, final Column c, final Object v) {
+        //TODO store in current transaction
+    }
+
+    public Object storedValue(final Record r, final Column c) {
+        //TODO fetch from current transaction
+        return r.get(c);
+    }
 }
