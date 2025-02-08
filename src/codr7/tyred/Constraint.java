@@ -14,11 +14,11 @@ public interface Constraint extends TableDefinition {
     }
 
     @Override
-    default String createSQL() {
-        return TableDefinition.super.createSQL() + ' ' +
+    default String createSql() {
+        return TableDefinition.super.createSql() + ' ' +
                 constraintType() + " (" +
                 columns().
-                        map(c -> SQL.quote(c.name())).
+                        map(c -> Utils.quote(c.name())).
                         collect(Collectors.joining( ", ")) +
                 ')';
     }

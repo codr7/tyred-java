@@ -14,7 +14,7 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         SetNull
     }
 
-    public static String toSQL(Action a) {
+    public static String toSql(Action a) {
         return switch (a) {
             case Cascade -> "CASCADE";
             case NoAction -> "NO ACTION";
@@ -40,7 +40,7 @@ public class ForeignKey extends BaseConstraint implements Constraint {
 
         foreignTable.primaryKey().columns().forEach(fc -> {
             foreignColumns.add(fc);
-            final var c = fc.dup(table, name + StringUtils.toNameCase(fc.name()), options().toArray(Option[]::new));
+            final var c = fc.dup(table, name + Utils.toNameCase(fc.name()), options().toArray(Option[]::new));
             add(c);
         });
     }
@@ -51,13 +51,13 @@ public class ForeignKey extends BaseConstraint implements Constraint {
     }
 
     @Override
-    public String createSQL() {
-        return super.createSQL() + " REFERENCES " +
-                SQL.quote(foreignTable.name()) + " (" +
+    public String createSql() {
+        return super.createSql() + " REFERENCES " +
+                Utils.quote(foreignTable.name()) + " (" +
                 foreignColumns.stream().
-                        map(c -> SQL.quote(c.name())).
+                        map(c -> Utils.quote(c.name())).
                         collect(Collectors.joining( ", ")) +
-                ") ON DELETE " + toSQL(onDelete) + " ON UPDATE " + toSQL(onUpdate);
+                ") ON DELETE " + toSql(onDelete) + " ON UPDATE " + toSql(onUpdate);
     }
 
     public ForeignKey onDelete(final Action action) {

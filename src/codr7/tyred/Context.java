@@ -47,6 +47,10 @@ public class Context {
         }
     }
 
+    public void rollback() {
+        exec("ROLLBACK");
+    }
+
     public void storeValue(final Record r, final Column c, final Object v) {
         //TODO store in current transaction
     }

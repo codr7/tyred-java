@@ -7,12 +7,12 @@ public interface TableColumn extends Column, TableDefinition {
 
     @Override
     default int compareTo(Column c) {
-        return name().compareTo(c.name());
+        return nameSql().compareTo(c.nameSql());
     }
 
     @Override
-    default String createSQL() {
-        var sql = SQL.quote(name()) + ' ' + columnType();
+    default String createSql() {
+        var sql = Utils.quote(name()) + ' ' + columnType();
         if (!isNullable()) { sql += " NOT NULL"; }
         return sql;
     }
@@ -35,6 +35,10 @@ public interface TableColumn extends Column, TableDefinition {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    default String nameSql() {
+        return Utils.quote(name());
     }
 }
 

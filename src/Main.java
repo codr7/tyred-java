@@ -18,12 +18,15 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        final var cx = new Context("frihda", "frihda", "frihda");
+        final var cx = new Context("tyred", "tyred", "tyred");
         final var db = new DB();
         db.migrate(cx);
 
         final var u = new Record();
         u.set(db.userName, "foo");
         db.users.insert(u, cx);
+        u.set(db.userName, "bar");
+        db.users.update(u, cx);
+        cx.rollback();
     }
 }

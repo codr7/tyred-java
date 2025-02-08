@@ -2,17 +2,17 @@ package codr7.tyred;
 
 public interface Definition {
     default void create(final Context cx) {
-        cx.exec("CREATE " + createSQL());
+        cx.exec("CREATE " + createSql());
     }
 
-    default String createSQL() {
-        return definitionType() + ' ' + SQL.quote(name());
+    default String createSql() {
+        return definitionType() + ' ' + Utils.quote(name());
     }
 
     String definitionType();
 
     default void drop(final Context cx) {
-        cx.exec("DROP " + definitionType() + ' ' + SQL.quote(name()));
+        cx.exec("DROP " + definitionType() + ' ' + Utils.quote(name()));
     }
 
     boolean exists(Context cx);

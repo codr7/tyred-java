@@ -2,6 +2,7 @@ package codr7.tyred;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,10 +35,10 @@ public class Table extends BaseDefinition implements Definition {
     }
 
     @Override
-    public final String createSQL() {
-        return Definition.super.createSQL() + " (" +
+    public final String createSql() {
+        return Definition.super.createSql() + " (" +
                 columns.stream().
-                        map(TableColumn::createSQL).
+                        map(TableColumn::createSql).
                         collect(Collectors.joining(", ")) +
                 ')';
     }
@@ -70,8 +71,8 @@ public class Table extends BaseDefinition implements Definition {
                 map(c -> new Pair<Column, Object>(c, r.get(c))).
                 toList();
 
-        final var sql = "INSERT INTO " + SQL.quote(name()) + " (" +
-                cs.stream().map(cv -> SQL.quote(cv.left().name())).collect(Collectors.joining(", ")) +
+        final var sql = "INSERT INTO " + Utils.quote(name()) + " (" +
+                cs.stream().map(cv -> cv.left().nameSql()).collect(Collectors.joining(", ")) +
                 ") VALUES (" +
                 String.join(", ", Collections.nCopies(cs.size(), "?")) +
                 ')';
@@ -130,7 +131,7 @@ public class Table extends BaseDefinition implements Definition {
                 map(c -> new Pair<Column, Object>(c, r.get(c))).
                 filter(cv -> {
                     final var sv = cx.storedValue(r, cv.left());
-                    return sv == null && !cv.right().equals(sv);
+                    return !cv.right().equals(sv);
                 }).toList();
 
         if (cs.isEmpty()) {
@@ -141,13 +142,24 @@ public class Table extends BaseDefinition implements Definition {
                 map(c -> new Pair<Column, Object>(c, cx.storedValue(r, c))).
                 toList();
 
-        final var sql = "UPDATE " + SQL.quote(name()) + " SET " +
-                cs.stream().
-                        map(cv -> SQL.quote(cv.left().name()) + "= ?").
-                        collect(Collectors.joining(", ")) +
-                " WHERE ";
+        final var wc = Condition.AND(kcs.stream().map(cv -> {
+            final var v = cv.right();
 
-        cx.exec(sql, Stream.concat(cs.stream().map(Pair::right), kcs.stream().map(Pair::right)).toArray(Object[]::new));
+            if (v == null) {
+                throw new RuntimeException("Missing key: " + cv.left());
+            }
+
+            return cv.left().EQ(cv.right());
+        }).toArray(Condition[]::new));
+
+        final var sql = "UPDATE " + Utils.quote(name()) + " SET " +
+                cs.stream().
+                        map(cv -> cv.left().nameSql() + "= ?").
+                        collect(Collectors.joining(", ")) +
+                " WHERE " + wc.sql();
+
+        final var ps = Stream.concat(cs.stream().map(Pair::right), Arrays.stream(wc.params())).toArray(Object[]::new);
+        cx.exec(sql, ps);
 
         for (final var h : afterUpdate) {
             h.call(r, cx);
