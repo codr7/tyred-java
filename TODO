@@ -1,7 +1,3 @@
-* implement hostr db
-** fix example
-*** store values in cx
-**** add tx stack
-*** fetch transaction stored value in context
-** add index support
-** add sequence support
+* extract test
+* add index support
+* add sequence support
