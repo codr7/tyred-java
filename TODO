@@ -1,4 +1,9 @@
-* extract test from main
 * add models (hostr)
 * add index support
 * add sequence support
+
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (final ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
