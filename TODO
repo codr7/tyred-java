@@ -1,4 +1,8 @@
-* add models (hostr)
+* add record isStored/isModified tests
+
+* add model tests
+** isStored/isModified
+
 * add index support
 * add sequence support
 

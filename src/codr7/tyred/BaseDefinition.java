@@ -1,6 +1,6 @@
 package codr7.tyred;
 
-public class BaseDefinition {
+public abstract class BaseDefinition implements Definition {
     private final String name;
 
     public BaseDefinition(final String name) {

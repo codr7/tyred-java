@@ -34,9 +34,13 @@ public class Table extends BaseDefinition implements Definition {
         foreignKeys.add(k);
     }
 
+    public final Stream<TableColumn> columns() {
+        return columns.stream();
+    }
+
     @Override
     public final String createSql() {
-        return Definition.super.createSql() + " (" +
+        return super.createSql() + " (" +
                 columns.stream().
                         map(TableColumn::createSql).
                         collect(Collectors.joining(", ")) +

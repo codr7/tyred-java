@@ -3,7 +3,7 @@ package codr7.tyred;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class BaseTableDefinition extends BaseDefinition {
+public abstract class BaseTableDefinition extends BaseDefinition implements TableDefinition {
     private final Set<Option> options;
     private final Table table;
 
