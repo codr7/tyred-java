@@ -1,8 +1,4 @@
-* add record isStored test
-
 * add model tests
-** isStored/isModified
-
 * add index support
 * add sequence support
 

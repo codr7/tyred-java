@@ -50,4 +50,26 @@ class RecordTest extends BaseTest {
 
         cx.rollback();
     }
+
+    @Test
+    public void testIsStored() {
+        final var cx = newTestContext();
+        final var r = new Record();
+        assertFalse(r.isStored(t, cx));
+
+        r.set(c1, "foo");
+        assertFalse(r.isStored(t, cx));
+
+        t.migrate(cx);
+        t.insert(r, cx);
+        assertTrue(r.isStored(t, cx));
+
+        r.set(c1, "bar");
+        assertTrue(r.isStored(t, cx));
+
+        t.update(r, cx);
+        assertTrue(r.isStored(t, cx));
+
+        cx.rollback();
+    }
 }
