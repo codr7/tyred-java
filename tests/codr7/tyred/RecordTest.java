@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class RecordTest extends BaseTest {
     static Table t = new Table("RecordTestTable");
-    static final StringColumn c1 = new StringColumn(t, "RecordTestColumn1", 100, Option.PrimaryKey);
-    static final StringColumn c2 = new StringColumn(t, "RecordTestColumn2", 100, Option.Nullable);
+    static final StringColumn c1 = new StringColumn(t, "Column1", 100, Option.PrimaryKey);
+    static final StringColumn c2 = new StringColumn(t, "Column2", 100, Option.Nullable);
 
     @Test
     public void testEquals() {

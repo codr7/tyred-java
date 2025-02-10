@@ -1,6 +1,3 @@
-* add record.store(t, cx)
-** use in record test
-
 * add record isStored test
 
 * add model tests

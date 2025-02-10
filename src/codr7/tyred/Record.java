@@ -41,15 +41,15 @@ public final class Record {
         return fields.entrySet().stream();
     }
 
-    public <T> T get(TypedColumn<T> c) {
+    public <T> T get(final TypedColumn<T> c) {
         return (T)fields.get(c);
     }
 
-    public Object getObject(Column c) {
+    public Object getObject(final Column c) {
         return fields.get(c);
     }
 
-    public boolean isModified(Table t, Context cx) {
+    public boolean isModified(final Table t, final Context cx) {
         return t.columns().anyMatch(c -> {
             final var v = getObject(c);
             final var sv = cx.storedValue(this, c);
@@ -66,15 +66,23 @@ public final class Record {
         });
     }
 
-    public boolean isStored(Table t, Context cx) {
+    public boolean isStored(final Table t, final Context cx) {
         return t.primaryKey().columns().allMatch(c -> cx.storedValue(this, c) != null);
     }
 
-    public <T> void set(TypedColumn<T> c, T v) {
+    public <T> void set(final TypedColumn<T> c, T v) {
         fields.put(c, v);
     }
 
-    public void setObject(Column c, Object v) {
+    public void setObject(final Column c, final Object v) {
         fields.put(c, v);
+    }
+
+    public void store(final Table t, final Context cx) {
+        if (isStored(t, cx)) {
+            t.update(this, cx);
+        } else {
+            t.insert(this, cx);
+        }
     }
 }
