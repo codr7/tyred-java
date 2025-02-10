@@ -1,4 +1,7 @@
-* add record isStored/isModified tests
+* add record.store(t, cx)
+** use in record test
+
+* add record isStored test
 
 * add model tests
 ** isStored/isModified

@@ -62,7 +62,7 @@ public final class Record {
                 return true;
             }
 
-            return c.equal(v, sv);
+            return !c.equal(v, sv);
         });
     }
 
