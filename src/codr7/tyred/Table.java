@@ -67,8 +67,8 @@ public class Table extends BaseDefinition implements Definition {
         }
 
         final var cs = columns.stream().
-                filter(c -> r.get(c) != null).
-                map(c -> new Pair<Column, Object>(c, r.get(c))).
+                filter(c -> r.getObject(c) != null).
+                map(c -> new Pair<Column, Object>(c, r.getObject(c))).
                 toList();
 
         final var sql = "INSERT INTO " + Utils.quote(name()) + " (" +
@@ -127,8 +127,8 @@ public class Table extends BaseDefinition implements Definition {
         }
 
         final var cs = columns.stream().
-                filter(c -> r.get(c) != null).
-                map(c -> new Pair<Column, Object>(c, r.get(c))).
+                filter(c -> r.getObject(c) != null).
+                map(c -> new Pair<Column, Object>(c, r.getObject(c))).
                 filter(cv -> {
                     final var sv = cx.storedValue(r, cv.left());
                     return !cv.right().equals(sv);
