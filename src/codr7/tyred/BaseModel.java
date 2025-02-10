@@ -1,21 +1,15 @@
 package codr7.tyred;
 
 public abstract class BaseModel implements Model {
-    private final Context context;
     private final Record record;
 
-    public BaseModel(Context cx, Record r) {
-        this.context = cx;
+    public BaseModel(Record r) {
         this.record = r;
     }
 
-    public final Context context() {
-        return context;
-    }
-
-    public boolean isModified() {
+    public boolean isModified(final Context cx) {
         for (final var t: tables()) {
-            if (record.isModified(t, context)) {
+            if (record.isModified(t, cx)) {
                 return true;
             }
         }
@@ -23,9 +17,9 @@ public abstract class BaseModel implements Model {
         return false;
     }
 
-    public boolean isStored() {
+    public boolean isStored(final Context cx) {
         for (final var t: tables()) {
-            if (!record.isStored(t, context)) {
+            if (!record.isStored(t, cx)) {
                 return false;
             }
         }
@@ -35,5 +29,11 @@ public abstract class BaseModel implements Model {
 
     public final Record record() {
         return record;
+    }
+
+    public final void store(final Context cx) {
+        for (final var t: tables()) {
+            record.store(t, cx);
+        }
     }
 }

@@ -1,9 +1,8 @@
 package codr7.tyred;
 
 public interface Model {
-    Context context();
-    boolean isModified();
-    boolean isStored();
+    boolean isModified(Context cx);
+    boolean isStored(Context cx);
     Record record();
     Table[] tables();
 }

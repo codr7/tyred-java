@@ -21,6 +21,8 @@ public class Transaction {
                 cx.storeValue(sv.getKey(), sv.getValue());
             }
         }
+
+        storedValues.clear();
     }
 
     public void rollback(final Context cx) {
@@ -29,6 +31,8 @@ public class Transaction {
         } else {
             cx.exec("ROLLBACK TO " + savePoint);
         }
+
+        storedValues.clear();
     }
 
     public void storeValue(final Pair<Record, Column> rc, final Object v) {

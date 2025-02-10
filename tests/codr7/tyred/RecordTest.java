@@ -27,49 +27,35 @@ class RecordTest extends BaseTest {
     }
 
     @Test
-    public void testIsModified() {
+    public void testStore() {
         final var cx = newTestContext();
         final var r = new Record();
+        assertFalse(r.isStored(t, cx));
         assertFalse(r.isModified(t, cx));
 
         r.set(c1, "foo");
+        assertFalse(r.isStored(t, cx));
         assertTrue(r.isModified(t, cx));
 
         t.migrate(cx);
-        t.insert(r, cx);
+        r.store(t, cx);
+        assertTrue(r.isStored(t, cx));
         assertFalse(r.isModified(t, cx));
 
         r.set(c1, "bar");
+        assertTrue(r.isStored(t, cx));
         assertTrue(r.isModified(t, cx));
 
-        t.update(r, cx);
+        r.store(t, cx);
+        assertTrue(r.isStored(t, cx));
         assertFalse(r.isModified(t, cx));
 
         r.set(c2, "foo");
+        assertTrue(r.isStored(t, cx));
         assertTrue(r.isModified(t, cx));
 
         cx.rollback();
-    }
-
-    @Test
-    public void testIsStored() {
-        final var cx = newTestContext();
-        final var r = new Record();
         assertFalse(r.isStored(t, cx));
-
-        r.set(c1, "foo");
-        assertFalse(r.isStored(t, cx));
-
-        t.migrate(cx);
-        t.insert(r, cx);
-        assertTrue(r.isStored(t, cx));
-
-        r.set(c1, "bar");
-        assertTrue(r.isStored(t, cx));
-
-        t.update(r, cx);
-        assertTrue(r.isStored(t, cx));
-
-        cx.rollback();
+        assertTrue(r.isModified(t, cx));
     }
 }

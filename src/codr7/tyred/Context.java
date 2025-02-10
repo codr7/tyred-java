@@ -79,6 +79,11 @@ public class Context {
 
     public void rollback() {
         final var t = transactions.remove(transactions.size()-1);
+
+        if (transactions.isEmpty()) {
+            transactions.add(t);
+        }
+
         t.rollback(this);
     }
 
