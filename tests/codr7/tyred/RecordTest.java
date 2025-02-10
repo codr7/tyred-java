@@ -1,10 +1,8 @@
-package codr7.tyred_tests;
+package codr7.tyred;
 
-import codr7.tyred.Table;
 import codr7.tyred.columns.StringColumn;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import codr7.tyred.Record;
 
 class RecordTest {
     @Test
