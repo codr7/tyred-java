@@ -15,6 +15,8 @@ public class Table extends BaseDefinition implements Definition {
 
     private final List<TableColumn> columns = new ArrayList<>();
     private final List<ForeignKey> foreignKeys = new ArrayList<>();
+    private final List<Index> indexes = new ArrayList<>();
+
     private Key primaryKey;
 
     public final List<EventHandler> beforeInsert = new ArrayList<>();
@@ -26,12 +28,16 @@ public class Table extends BaseDefinition implements Definition {
         super(name);
     }
 
-    public final void add(final TableColumn c) {
-        columns.add(c);
-    }
-
     public final void add(final ForeignKey k) {
         foreignKeys.add(k);
+    }
+
+    public final void add(final Index i) {
+        indexes.add(i);
+    }
+
+    public final void add(final TableColumn c) {
+        columns.add(c);
     }
 
     public final Stream<TableColumn> columns() {
@@ -98,19 +104,18 @@ public class Table extends BaseDefinition implements Definition {
             for (final var c : columns) {
                 c.migrate(cx);
             }
-
-            primaryKey().migrate(cx);
-
-            for (final var k : foreignKeys) {
-                k.migrate(cx);
-            }
         } else {
             create(cx);
-            primaryKey().create(cx);
+        }
 
-            for (final var k : foreignKeys) {
-                k.create(cx);
-            }
+        primaryKey().migrate(cx);
+
+        for (final var fk : foreignKeys) {
+            fk.migrate(cx);
+        }
+
+        for (final var i : indexes) {
+            i.migrate(cx);
         }
     }
 

@@ -1,6 +1,6 @@
 * add model tests
-* add index support
 * add sequence support
+* add query
 
         try {
             Class.forName("org.h2.Driver");
