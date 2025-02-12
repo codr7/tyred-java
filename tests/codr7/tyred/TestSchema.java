@@ -9,13 +9,14 @@ public class TestSchema extends Schema {
 
     public final Table users = add(new Table("TestUsers"));
     public final LongColumn userId = new LongColumn(users, "id", Option.PrimaryKey);
-    public final StringColumn userName = new StringColumn(users, "Name", 100, Option.Nullable);
 
     public final DateColumn userDate = new DateColumn(users, "Date", Option.Nullable);
     public final DateTimeColumn userDateTime = new DateTimeColumn(users, "DateTime", Option.Nullable);
+    public final IntegerColumn userInteger = new IntegerColumn(users, "Integer", Option.Nullable);
+    public final StringColumn userString = new StringColumn(users, "String", 100, Option.Nullable);
     public final TimeColumn userTime = new TimeColumn(users, "Time", Option.Nullable);
 
-    public final Index userNameIndex = new Index(users, "UserName", true, Stream.of(userName));
+    public final Index userStringIndex = new Index(users, "UserString", true, Stream.of(userString));
 
     public final Table admins = add(new Table("TestAdmins"));
     public final ForeignKey adminUserKey = new ForeignKey(admins, "User", users, Option.PrimaryKey);

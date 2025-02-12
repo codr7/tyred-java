@@ -20,11 +20,11 @@ class ModelTest extends BaseTest {
 
 
         public String name() {
-            return record().get(db.userName);
+            return record().get(db.userString);
         }
 
         public User setName(final String v) {
-            record().set(db.userName, v);
+            record().set(db.userString, v);
             return this;
         }
 
