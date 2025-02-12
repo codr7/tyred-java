@@ -13,21 +13,14 @@ class ModelTest extends BaseTest {
             db = s;
         }
 
-        public User(final TestSchema s) {
+        public User(final TestSchema s, final Context cx) {
             this(s, new Record());
+            record().set(db.userId, s.userIds.nextValue(cx));
         }
 
-        public String email() {
-            return record().get(db.userEmail);
-        }
 
         public String name() {
             return record().get(db.userName);
-        }
-
-        public User setEmail(final String v) {
-            record().set(db.userEmail, v);
-            return this;
         }
 
         public User setName(final String v) {
@@ -44,21 +37,19 @@ class ModelTest extends BaseTest {
     @Test
     public void testStore() {
         final var s = new TestSchema();
-        final var u = new User(s);
         final var cx = newTestContext();
-        assertFalse(u.isStored(cx));
-        assertFalse(u.isModified(cx));
+        s.migrate(cx);
 
-        u.setEmail("foo").setName("bar");
+        final var u = new User(s, cx);
+        u.setName("foo");
         assertFalse(u.isStored(cx));
         assertTrue(u.isModified(cx));
 
-        s.migrate(cx);
         u.store(cx);
         assertTrue(u.isStored(cx));
         assertFalse(u.isModified(cx));
 
-        u.setEmail("baz").setName("qux");
+        u.setName("bar");
         assertTrue(u.isStored(cx));
         assertTrue(u.isModified(cx));
 
