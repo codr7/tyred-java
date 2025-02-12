@@ -1,7 +1,6 @@
 package codr7.tyred;
 
-import codr7.tyred.columns.LongColumn;
-import codr7.tyred.columns.StringColumn;
+import codr7.tyred.columns.*;
 
 import java.util.stream.Stream;
 
@@ -11,6 +10,11 @@ public class TestSchema extends Schema {
     public final Table users = add(new Table("TestUsers"));
     public final LongColumn userId = new LongColumn(users, "id", Option.PrimaryKey);
     public final StringColumn userName = new StringColumn(users, "Name", 100, Option.Nullable);
+
+    public final DateColumn userDate = new DateColumn(users, "Date", Option.Nullable);
+    public final DateTimeColumn userDateTime = new DateTimeColumn(users, "DateTime", Option.Nullable);
+    public final TimeColumn userTime = new TimeColumn(users, "Time", Option.Nullable);
+
     public final Index userNameIndex = new Index(users, "UserName", true, Stream.of(userName));
 
     public final Table admins = add(new Table("TestAdmins"));
