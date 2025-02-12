@@ -12,7 +12,7 @@ public class Context {
 
     public Context(final String path, final String user, final String password) {
         try {
-            db = DriverManager.getConnection("jdbc:h2:" + Paths.get(path).toAbsolutePath(), user, password);
+            db = DriverManager.getConnection(path, user, password);
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }

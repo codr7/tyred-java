@@ -19,11 +19,11 @@ class ModelTest extends BaseTest {
         }
 
 
-        public String name() {
+        public String string() {
             return record().get(db.userString);
         }
 
-        public User setName(final String v) {
+        public User setString(final String v) {
             record().set(db.userString, v);
             return this;
         }
@@ -41,7 +41,7 @@ class ModelTest extends BaseTest {
         s.migrate(cx);
 
         final var u = new User(s, cx);
-        u.setName("foo");
+        u.setString("foo");
         assertFalse(u.isStored(cx));
         assertTrue(u.isModified(cx));
 
@@ -49,7 +49,7 @@ class ModelTest extends BaseTest {
         assertTrue(u.isStored(cx));
         assertFalse(u.isModified(cx));
 
-        u.setName("bar");
+        u.setString("bar");
         assertTrue(u.isStored(cx));
         assertTrue(u.isModified(cx));
 
