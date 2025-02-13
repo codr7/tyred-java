@@ -167,7 +167,7 @@ public class Table extends BaseDefinition implements Definition {
                         collect(Collectors.joining(", ")) +
                 " WHERE " + wc.sql();
 
-        final var ps = Stream.concat(cs.stream().map(Pair::right), Arrays.stream(wc.params())).toArray(Object[]::new);
+        final var ps = Stream.concat(cs.stream().map(Pair::right), wc.params()).toArray(Object[]::new);
         cx.exec(sql, ps);
 
         for (final var h : afterUpdate) {

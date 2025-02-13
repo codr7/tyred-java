@@ -31,9 +31,11 @@ public abstract class BaseModel implements Model {
         return record;
     }
 
-    public final void store(final Context cx) {
+    public final Model store(final Context cx) {
         for (final var t: tables()) {
             record.store(t, cx);
         }
+
+        return this;
     }
 }
