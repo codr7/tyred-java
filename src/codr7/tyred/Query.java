@@ -1,5 +1,6 @@
 package codr7.tyred;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,20 @@ public class Query implements Source {
 
     public Query(final Source from) {
         this.from = from;
+    }
+
+    public Record[] findAll(final Context cx) {
+        try (final var q = cx.query(sourceSql(), sourceParams().toArray(Object[]::new))) {
+            final var rs = new ArrayList<Record>();
+
+            while (q.next()) {
+                rs.add(new Record(q, select.toArray(Column[]::new)));
+            }
+
+            return rs.toArray(Record[]::new);
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Query join(final ForeignKey k) {
@@ -67,10 +82,6 @@ public class Query implements Source {
 
     @Override
     public String sourceSql() {
-        return sql();
-    }
-
-    public String sql() {
         final var sql = new StringBuilder();
 
         sql.append("SELECT ").

@@ -1,11 +1,25 @@
 package codr7.tyred;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public final class Record {
     private final Map<Column, Object> fields = new TreeMap<>();
+
+    public Record() {}
+
+    public Record(final ResultSet source, final Column...columns) {
+        for (var i = 0; i < columns.length; i++) {
+            try {
+                setObject(columns[i], source.getObject(i));
+            } catch (final SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @Override
     public boolean equals(final Object o) {
