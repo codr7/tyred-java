@@ -24,7 +24,7 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         };
     }
 
-    private final List<TableColumn> foreignColumns = new ArrayList<>();
+    private final List<Pair<TableColumn, TableColumn>> foreignColumns = new ArrayList<>();
     private final Table foreignTable;
 
     private Action onDelete = Action.Restrict;
@@ -39,9 +39,9 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         table.add(this);
 
         foreignTable.primaryKey().columns().forEach(fc -> {
-            foreignColumns.add(fc);
             final var c = fc.dup(table, name + Utils.toNameCase(fc.name()), options().toArray(Option[]::new));
             add(c);
+            foreignColumns.add(new Pair<>(c, fc));
         });
     }
 
@@ -55,9 +55,17 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         return super.createSql() + " REFERENCES " +
                 Utils.quote(foreignTable.name()) + " (" +
                 foreignColumns.stream().
-                        map(c -> Utils.quote(c.name())).
+                        map(c -> Utils.quote(c.right().name())).
                         collect(Collectors.joining( ", ")) +
                 ") ON DELETE " + toSql(onDelete) + " ON UPDATE " + toSql(onUpdate);
+    }
+
+    public Stream<Pair<TableColumn, TableColumn>> foreignColumns() {
+        return foreignColumns.stream();
+    }
+
+    public Table foreignTable() {
+        return foreignTable;
     }
 
     public ForeignKey onDelete(final Action action) {

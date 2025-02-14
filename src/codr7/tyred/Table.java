@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Table extends BaseDefinition implements Definition {
+public class Table extends BaseDefinition implements Definition, Source {
     public interface EventHandler {
         void call(Record r, Context cx);
     }
@@ -128,6 +128,16 @@ public class Table extends BaseDefinition implements Definition {
         }
 
         return primaryKey;
+    }
+
+    @Override
+    public Stream<Object> sourceParams() {
+        return Stream.empty();
+    }
+
+    @Override
+    public String sourceSql() {
+        return Utils.quote(name());
     }
 
     public boolean update(final Record r, final Context cx) {

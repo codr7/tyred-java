@@ -24,6 +24,16 @@ public class Query implements Source {
         this.from = from;
     }
 
+    public Query join(final ForeignKey k) {
+        final var c = Condition.AND(
+                k.foreignColumns().
+                        map(fc -> fc.left().EQ(fc.right())).
+                        toArray(Condition[]::new));
+
+        from = new Join(from, k.foreignTable(), c);
+        return this;
+    }
+
     public Query limit(final long n) {
         limit = n;
         return this;
