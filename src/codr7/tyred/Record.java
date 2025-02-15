@@ -84,19 +84,31 @@ public final class Record {
         return t.primaryKey().columns().allMatch(c -> cx.storedValue(this, c) != null);
     }
 
-    public <T> void set(final TypedColumn<T> c, T v) {
+    public <T> Record set(final TypedColumn<T> c, T v) {
         fields.put(c, v);
+        return this;
     }
 
-    public void setObject(final Column c, final Object v) {
-        fields.put(c, v);
+    public <T> Record set(final ForeignKey k, final Record v) {
+        k.foreignColumns().forEach(c -> {
+            setObject(c.left(), v.getObject(c.right()));
+        });
+
+        return this;
     }
 
-    public void store(final Table t, final Context cx) {
+    public Record setObject(final Column c, final Object v) {
+        fields.put(c, v);
+        return this;
+    }
+
+    public Record store(final Table t, final Context cx) {
         if (isStored(t, cx)) {
             t.update(this, cx);
         } else {
             t.insert(this, cx);
         }
+
+        return this;
     }
 }
