@@ -4,7 +4,7 @@
 This project is part of the [tyred](https://github.com/codr7/tyred) family of frameworks.
 
 ### License
-Plain old MIT, except for members of the following loser organizations:
+MIT, except for members of the following loser organizations:
 
 - 365ID
 - CatalystOne Solutions
