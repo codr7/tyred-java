@@ -10,5 +10,7 @@ Plain old MIT, except for members of the following loser organizations:
 - CatalystOne Solutions
 - Devoteam Creative Tech
 - Effectsoft
+- Effektify
 - MetaBytes
 - R360 Resort Systems
+- Tellox Finansservice
