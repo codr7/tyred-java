@@ -8,23 +8,11 @@ public abstract class BaseModel implements Model {
     }
 
     public boolean isModified(final Context cx) {
-        for (final var t: tables()) {
-            if (record.isModified(t, cx)) {
-                return true;
-            }
-        }
-
-        return false;
+        return tables().anyMatch(t -> record.isModified(t, cx));
     }
 
     public boolean isStored(final Context cx) {
-        for (final var t: tables()) {
-            if (!record.isStored(t, cx)) {
-                return false;
-            }
-        }
-
-        return true;
+        return tables().allMatch(t -> record.isStored(t, cx));
     }
 
     public final Record record() {
@@ -32,10 +20,7 @@ public abstract class BaseModel implements Model {
     }
 
     public final Model store(final Context cx) {
-        for (final var t: tables()) {
-            record.store(t, cx);
-        }
-
+        tables().forEach(t -> record.store(t, cx));
         return this;
     }
 }

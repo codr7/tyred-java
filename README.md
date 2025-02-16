@@ -68,8 +68,8 @@ public class User extends Model {
     }
 
     @Override
-    public Table[] tables() {
-        return new Table[]{db.users};
+    public Stream<Table> tables() {
+        return Stream.of(db.users);
     }
 }
 ```
@@ -110,8 +110,8 @@ public class Resource extends Model {
     }
 
     @Override
-    public Table[] tables() {
-        return new Table[]{db.resources};
+    public Stream<Table> tables() {
+        return Stream.of(db.resources);
     }
 }
 ```
@@ -165,8 +165,8 @@ public class Calendar extends Model {
     }
 
     @Override
-    public Table[] tables() {
-        return new Table[]{db.calendars};
+    public Stream<Table> tables() {
+        return Stream.of(db.calendars);
     }
 }
 ```

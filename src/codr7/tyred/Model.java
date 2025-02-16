@@ -1,8 +1,10 @@
 package codr7.tyred;
 
+import java.util.stream.Stream;
+
 public interface Model {
     boolean isModified(Context cx);
     boolean isStored(Context cx);
     Record record();
-    Table[] tables();
+    Stream<Table> tables();
 }

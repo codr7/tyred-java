@@ -2,6 +2,8 @@ package codr7.tyred;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ModelTest extends BaseTest {
@@ -29,8 +31,8 @@ class ModelTest extends BaseTest {
         }
 
         @Override
-        public Table[] tables() {
-            return new Table[]{db.users};
+        public Stream<Table> tables() {
+            return Stream.of(db.users);
         }
     }
 
