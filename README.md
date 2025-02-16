@@ -14,7 +14,7 @@ So far, it has been tested with [H2](https://www.h2database.com/).
 The following example defines a simple database consisting of users, resources and calendars
 to track availability.
 
-```
+```java
 public class Database extends Schema {
     public final Table users = add(new Table("users"));
     public final StringColumn userName = new StringColumn(users, "name", 100, Option.PrimaryKey);
