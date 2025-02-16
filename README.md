@@ -118,7 +118,7 @@ public class Resource extends Model {
 ```java
 public class Calendar extends Model {
     public Calendar(final Resource rc) {
-        super(rc.db, new codr7.tyred.Record());
+        super(rc.db, new Record());
 
         record()
                 .set(db.calendarResource, rc.record())
