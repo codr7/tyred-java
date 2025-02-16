@@ -45,6 +45,14 @@ public class Database extends Schema {
 ### Records
 A record maps columns to values, columns may belong to different tables.
 
+```java
+var db = new Database();
+var cx = new Context("test", "test", "test");
+var r = new Record();
+r.set(db.userName, "admin");
+r.store(db.users, cx);
+```
+
 ### Models
 A model encapsulates a record, which may contain columns from multiple tables.
 
