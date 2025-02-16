@@ -55,6 +55,16 @@ public final class Record {
         return fields.entrySet().stream();
     }
 
+    public Record get(final ForeignKey k) {
+        final var r = new Record();
+
+        k.foreignColumns().forEach(c -> {
+            r.setObject(c.right(), getObject(c.left()));
+        });
+
+        return r;
+    }
+
     public <T> T get(final TypedColumn<T> c) {
         return (T)fields.get(c);
     }
