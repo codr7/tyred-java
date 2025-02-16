@@ -1,8 +1,5 @@
 * add table load test
 
-* add Model.isCommitted()
-** add Record.isCommitted()
-
 * add query test
 
 * readme
