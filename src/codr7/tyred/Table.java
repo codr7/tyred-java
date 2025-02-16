@@ -1,5 +1,6 @@
 package codr7.tyred;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ public class Table extends BaseDefinition implements Definition, Source {
 
         final var cs = columns.stream().
                 filter(c -> r.getObject(c) != null).
-                map(c -> new Pair<Column, Object>(c, r.getObject(c))).
+                map(c -> new Pair<Column, Object>(c, c.encode(r.getObject(c)))).
                 toList();
 
         final var sql = "INSERT INTO " + Utils.quote(name()) + " (" +
@@ -95,6 +96,46 @@ public class Table extends BaseDefinition implements Definition, Source {
 
         for (final var cv: cs) {
             cx.storeValue(r, cv.left(), cv.right());
+        }
+    }
+
+    public ResultSet find(final Condition c, final Context cx) {
+        return cx.query("SELECT * FROM " + Utils.quote(name()) + " WHERE " + c.sql(), c.params());
+    }
+
+    public void load(final ResultSet q, final Record r, int i) {
+        for (final var c: columns) {
+            try {
+                r.setObject(c, c.decode(q.getObject(i)));
+                i++;
+            } catch (final SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public void load(final Record r, final Context cx) {
+        final var cs = primaryKey().columns().
+                map(c -> new Pair<Column, Object>(c, c.encode(r.getObject((c))))).
+                toList();
+
+        final var w = Condition.AND(cs.stream().map(cv -> {
+            final var v = cv.right();
+
+            if (v == null) {
+                throw new RuntimeException("Missing key: " + cv.left());
+            }
+
+            return cv.left().EQ(cv.right());
+        }).toArray(Condition[]::new));
+
+        try (final var q = find(w, cx)) {
+            if (!q.next()) {
+                throw new RuntimeException("Record not found: " + name() + '/' + Arrays.toString(w.params()));
+            }
+
+            load(q, r, 1);
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -147,7 +188,7 @@ public class Table extends BaseDefinition implements Definition, Source {
 
         final var cs = columns.stream().
                 filter(c -> r.getObject(c) != null).
-                map(c -> new Pair<Column, Object>(c, r.getObject(c))).
+                map(c -> new Pair<Column, Object>(c, c.encode(r.getObject(c)))).
                 filter(cv -> {
                     final var sv = cx.storedValue(r, cv.left());
                     return !cv.right().equals(sv);
@@ -158,7 +199,7 @@ public class Table extends BaseDefinition implements Definition, Source {
         }
 
         final var kcs = primaryKey().columns().
-                map(c -> new Pair<Column, Object>(c, cx.storedValue(r, c))).
+                map(c -> new Pair<Column, Object>(c, c.encode(cx.storedValue(r, c)))).
                 toList();
 
         final var wc = Condition.AND(kcs.stream().map(cv -> {
@@ -177,7 +218,7 @@ public class Table extends BaseDefinition implements Definition, Source {
                         collect(Collectors.joining(", ")) +
                 " WHERE " + wc.sql();
 
-        final var ps = Stream.concat(cs.stream().map(Pair::right), wc.params()).toArray(Object[]::new);
+        final var ps = Stream.concat(cs.stream().map(Pair::right), wc.paramStream()).toArray(Object[]::new);
         cx.exec(sql, ps);
 
         for (final var h : afterUpdate) {

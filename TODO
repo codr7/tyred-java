@@ -1,5 +1,4 @@
-* adjust date/datetime timezone when storing/loading
-** add TableColumn.encode()/decode()
+* add table load test
 
 * add Model.isCommitted()
 ** add Record.isCommitted()

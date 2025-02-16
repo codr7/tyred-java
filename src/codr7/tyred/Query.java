@@ -76,7 +76,7 @@ public class Query implements Source {
                 Stream.concat(
                         from.sourceParams(),
                         Stream.concat(
-                            (where == null) ? Stream.empty() : where.params(),
+                            (where == null) ? Stream.empty() : where.paramStream(),
                             orderBy.stream().flatMap(o -> o.left().columnParams()))));
     }
 
