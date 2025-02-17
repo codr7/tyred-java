@@ -26,7 +26,7 @@ public class Context {
         if (transactions.isEmpty()) {
             exec("BEGIN");
         } else {
-            savePoint = Integer.valueOf(transactions.size()).toString();
+            savePoint = 'S' + Integer.valueOf(transactions.size()).toString();
             exec("SAVEPOINT " + savePoint);
         }
 
@@ -38,11 +38,12 @@ public class Context {
     public void commit() {
         final var t = transactions.remove(transactions.size()-1);
 
+        t.commit(this);
+
         if (transactions.isEmpty()) {
             transactions.add(t);
+            exec("BEGIN");
         }
-
-        t.commit(this);
     }
 
     public void exec(final String sql, final Object...params) {
@@ -79,12 +80,12 @@ public class Context {
 
     public void rollback() {
         final var t = transactions.remove(transactions.size()-1);
+        t.rollback(this);
 
         if (transactions.isEmpty()) {
             transactions.add(t);
+            exec("BEGIN");
         }
-
-        t.rollback(this);
     }
 
     public void storeValue(final Pair<Record, Column> rc, final Object v) {

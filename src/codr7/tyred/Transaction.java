@@ -29,7 +29,7 @@ public class Transaction {
         if (savePoint == null) {
             cx.exec("ROLLBACK");
         } else {
-            cx.exec("ROLLBACK TO " + savePoint);
+            cx.exec("ROLLBACK TO SAVEPOINT " + savePoint);
         }
 
         storedValues.clear();

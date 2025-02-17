@@ -99,11 +99,24 @@ public class Table extends BaseDefinition implements Definition, Source {
         }
     }
 
+    public boolean exists(final Condition c, final Context cx) {
+        try (final var q = cx.query("SELECT EXISTS (SELECT NULL FROM " + Utils.quote(name()) + " WHERE " + c.sql() + ')', c.params())) {
+            q.next();
+            return q.getBoolean(1);
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean exists(final Record r, final Context cx) {
+        return exists(primaryKey.condition(r), cx);
+    }
+
     public ResultSet find(final Condition c, final Context cx) {
         return cx.query("SELECT * FROM " + Utils.quote(name()) + " WHERE " + c.sql(), c.params());
     }
 
-    public void load(final ResultSet q, final Record r, int i) {
+    public void load(final Record r, final ResultSet q, int i) {
         for (final var c: columns) {
             try {
                 r.setObject(c, c.decode(q.getObject(i)));
@@ -113,27 +126,16 @@ public class Table extends BaseDefinition implements Definition, Source {
             }
         }
     }
+
     public void load(final Record r, final Context cx) {
-        final var cs = primaryKey().columns().
-                map(c -> new Pair<Column, Object>(c, c.encode(r.getObject((c))))).
-                toList();
-
-        final var w = Condition.AND(cs.stream().map(cv -> {
-            final var v = cv.right();
-
-            if (v == null) {
-                throw new RuntimeException("Missing key: " + cv.left());
-            }
-
-            return cv.left().EQ(cv.right());
-        }).toArray(Condition[]::new));
+        final var w = primaryKey().condition(r);
 
         try (final var q = find(w, cx)) {
             if (!q.next()) {
                 throw new RuntimeException("Record not found: " + name() + '/' + Arrays.toString(w.params()));
             }
 
-            load(q, r, 1);
+            load(r, q, 1);
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
