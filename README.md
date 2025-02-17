@@ -11,21 +11,14 @@ if you don't use them, the database isn't required to support them.
 So far, it has been tested with [H2](https://www.h2database.com/).
 
 ### Definition
-The following example defines a simple database consisting of users, resources and calendars
-to track availability.
+The following example defines a simple database consisting of resources and calendars
+to track availability in time.
 
 ```java
 public class Database extends Schema {
-    public final Table users = add(new Table("users"));
-    public final StringColumn userName = new StringColumn(users, "name", 100, Option.PrimaryKey);
-
-    public final Sequence resourceIds = add(new Sequence("resourceIds", 1));
     public final Table resources = add(new Table("resources"));
-    public final LongColumn resourceId = new LongColumn(resources, "id", Option.PrimaryKey);
-    public final StringColumn resourceName = new StringColumn(resources, "name", 100);
+    public final StringColumn resourceName = new StringColumn(resources, "name", 100, Option.PrimaryKey);
     public final DateTimezColumn resourceCreatedAt = new DateTimezColumn(resources, "createdAt");
-    public final ForeignKey resourceCreatedBy = new ForeignKey(resources, "resourceCreatedBy", users);
-    public final Index resourceNameIndex = new Index(resources, "resourceName", false, Stream.of(resourceName));
 
     public final Table calendars = add(new Table("calendars"));
     public final DateTimeColumn calendarStart = new DateTimeColumn(calendars, "start", Option.PrimaryKey);
@@ -49,47 +42,18 @@ A record maps columns to values, columns may belong to different tables.
 var db = new Database();
 var cx = new Context("test", "test", "test");
 var r = new Record();
-r.set(db.userName, "admin");
-r.store(db.users, cx);
+r.set(db.resourceName, "foo");
+r.store(db.resources, cx);
 ```
 
 ### Models
 A model encapsulates a record, which may contain columns from multiple tables.
 
 ```java
-public class User extends Model {
-    public User(final Context cx) {
-        super(cx.db, new Record());
-    }
-
-    public User(final Database db, final Record r) {
-        super(db, r);
-    }
-
-    public String name() {
-        return record().get(db.userName);
-    }
-
-    public User setName(final String v) {
-        record().set(db.userName, v);
-        return this;
-    }
-
-    @Override
-    public Stream<Table> tables() {
-        return Stream.of(db.users);
-    }
-}
-```
-```java
 public class Resource extends Model {
-    public Resource(final Context cx) {
-        super(cx.db, new Record());
-
-        record()
-                .set(db.resourceId, db.resourceIds.nextValue(cx.dbContext))
-                .set(db.resourceCreatedAt, OffsetDateTime.now())
-                .set(db.resourceCreatedBy, cx.currentUser().record());
+    public Resource(final Database db) {
+        super(db, new Record());
+        record().set(db.resourceCreatedAt, OffsetDateTime.now());
     }
 
     public Resource(final Database db, final Record r) {
@@ -99,15 +63,7 @@ public class Resource extends Model {
     public OffsetDateTime createdAt() {
         return record().get(db.resourceCreatedAt);
     }
-
-    public User createdBy() {
-        return new User(db, record().get(db.resourceCreatedBy));
-    }
-
-    public long id() {
-        return record().get(db.resourceId);
-    }
-
+    
     public String name() {
         return record().get(db.resourceName);
     }
@@ -188,7 +144,7 @@ a context is created, and restarted when committed/rolled back.
 var db = new Database();
 var cx = new Context("test", "test", "test");
 
-var r = new Resource(cx);
+var r = new Resource(db);
 r.setName("foo").store(cx);
 cx.commit(); // Record committed to database
 
@@ -202,7 +158,7 @@ cx.rollback(); // Changes rolled back
 var db = new Database();
 var cx = new Context("test", "test", "test");
 
-var r = new Resource(cx);
+var r = new Resource(db);
 r.setName("foo").store(cx);
 cx.commit(); // Record committed to database
 
