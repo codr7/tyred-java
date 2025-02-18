@@ -112,14 +112,21 @@ public class Table extends BaseDefinition implements Definition, Source {
         return exists(primaryKey.condition(r), cx);
     }
 
-    public ResultSet find(final Condition c, final Context cx) {
-        return cx.query("SELECT * FROM " + Utils.quote(name()) + " WHERE " + c.sql(), c.params());
+    public ResultSet find(final Condition w, final Context cx) {
+        return cx.query("SELECT " +
+                columns.stream().map(TableColumn::nameSql).collect(Collectors.joining(", ")) +
+                " FROM " + Utils.quote(name()) + " WHERE " + w.sql(), w.params());
     }
 
     public void load(final Record r, final ResultSet q, int i) {
         for (final var c: columns) {
             try {
-                r.setObject(c, c.decode(q.getObject(i)));
+                final var v = q.getObject(i);
+
+                if (v != null) {
+                    r.setObject(c, c.decode(v));
+                }
+
                 i++;
             } catch (final SQLException e) {
                 throw new RuntimeException(e);

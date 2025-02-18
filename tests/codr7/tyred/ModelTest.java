@@ -38,11 +38,11 @@ class ModelTest extends BaseTest {
 
     @Test
     public void testStore() {
-        final var s = new TestSchema();
+        final var db = new TestSchema();
         final var cx = newTestContext();
-        s.migrate(cx);
+        db.migrate(cx);
 
-        final var u = new User(s, cx);
+        final var u = new User(db, cx);
         u.setString("foo");
         assertFalse(u.isStored(cx));
         assertTrue(u.isModified(cx));

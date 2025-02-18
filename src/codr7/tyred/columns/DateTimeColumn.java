@@ -16,6 +16,11 @@ public final class DateTimeColumn extends BaseColumn implements TypedColumn<Loca
     }
 
     @Override
+    public Object decode(final Object v) {
+        return ((java.sql.Timestamp)v).toLocalDateTime();
+    }
+
+    @Override
     public TableColumn dup(Table table, String name, Option...options) {
         return new DateTimeColumn(table, name, options);
     }

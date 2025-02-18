@@ -15,6 +15,11 @@ public final class DateColumn extends BaseColumn implements TypedColumn<LocalDat
     }
 
     @Override
+    public Object decode(final Object v) {
+        return ((java.sql.Date)v).toLocalDate();
+    }
+
+    @Override
     public TableColumn dup(Table table, String name, Option...options) {
         return new DateColumn(table, name, options);
     }
