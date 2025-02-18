@@ -64,6 +64,14 @@ public class ForeignKey extends BaseConstraint implements Constraint {
         return foreignColumns.stream();
     }
 
+    public Condition condition(final Record r) {
+        return Condition.fromColumns(columns(), r);
+    }
+
+    public Condition foreignCondition(final Record r) {
+        return Condition.fromColumnPairs(foreignColumns.stream(), r);
+    }
+
     public Table foreignTable() {
         return foreignTable;
     }

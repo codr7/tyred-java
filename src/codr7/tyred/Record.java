@@ -12,7 +12,7 @@ public final class Record {
     public Record() {}
 
     public Record(final ResultSet source, final Column...columns) {
-        for (var i = 0; i < columns.length; i++) {
+        for (var i = 1; i < columns.length; i++) {
             try {
                 setObject(columns[i], source.getObject(i));
             } catch (final SQLException e) {

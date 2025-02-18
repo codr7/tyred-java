@@ -19,7 +19,7 @@ public class Query implements Source {
     private long offset = -1;
     private final List<Pair<Column, Order>> orderBy = new ArrayList<>();
     private final List<Column> select = new ArrayList<>();
-    private Condition where;
+    private List<Condition> where = new ArrayList<>();
 
     public Query(final Source from) {
         this.from = from;
@@ -64,9 +64,13 @@ public class Query implements Source {
         return this;
     }
 
-    public Query select(final Column...columns) {
-        select.addAll(Arrays.stream(columns).toList());
+    public Query select(final Stream<Column> columns) {
+        select.addAll(columns.toList());
         return this;
+    }
+
+    public Query select(final Column...columns) {
+        return select(Arrays.stream(columns));
     }
 
     @Override
@@ -76,7 +80,7 @@ public class Query implements Source {
                 Stream.concat(
                         from.sourceParams(),
                         Stream.concat(
-                            (where == null) ? Stream.empty() : where.paramStream(),
+                            (where.isEmpty()) ? Stream.empty() : where().paramStream(),
                             orderBy.stream().flatMap(o -> o.left().columnParams()))));
     }
 
@@ -84,11 +88,12 @@ public class Query implements Source {
     public String sourceSql() {
         final var sql = new StringBuilder();
 
-        sql.append("SELECT ").
-                append(select.stream().map(Column::columnSql).collect(Collectors.joining(", ")));
+        sql.append("SELECT ")
+                .append(select.stream().map(Column::columnSql).collect(Collectors.joining(", ")))
+                .append(" FROM ").append(from.sourceSql());
 
-        if (where != null) {
-            sql.append(" WHERE ").append(where.sql());
+        if (!where.isEmpty()) {
+            sql.append(" WHERE ").append(where().sql());
         }
 
         if (!orderBy.isEmpty()) {
@@ -107,5 +112,19 @@ public class Query implements Source {
         }
 
         return sql.toString();
+    }
+
+    public Query where(final Stream<Condition> cs) {
+        where.addAll(cs.toList());
+        return this;
+    }
+
+    public Query where(final Condition...cs) {
+        return where(Arrays.stream(cs));
+    }
+
+    public Condition where() {
+        return Condition.AND(where.toArray(Condition[]::new));
+
     }
 }

@@ -20,4 +20,10 @@ public interface Column extends Comparable<Column> {
     default Condition EQ(final Object value) {
         return new Condition(nameSql() + " = ?", value);
     }
+    default Condition GT(final Object value) {
+        return new Condition(nameSql() + " > ?", value);
+    }
+    default Condition LT(final Object value) {
+        return new Condition(nameSql() + " < ?", value);
+    }
 }
