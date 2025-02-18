@@ -140,7 +140,7 @@ Transactions support nesting to unlimited depth. Nested transactions
 establish save points. The outer transaction is automatically started when
 a context is created, and restarted when committed/rolled back.
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 
@@ -154,7 +154,7 @@ cx.commit(); // Save point released
 cx.rollback(); // Changes rolled back
 ```
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 
