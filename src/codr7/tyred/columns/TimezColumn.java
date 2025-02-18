@@ -12,7 +12,7 @@ public final class TimezColumn extends BaseColumn implements TypedColumn<OffsetT
 
     @Override
     public String columnType() {
-        return "TIME WITH TIME ZONE";
+        return "TIME(9) WITH TIME ZONE";
     }
 
     @Override

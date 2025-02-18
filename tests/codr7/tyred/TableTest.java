@@ -2,7 +2,7 @@ package codr7.tyred;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,9 +15,10 @@ class TableTest extends BaseTest {
 
         final var r = new Record()
                 .set(db.userId, 1L)
-                .set(db.userDate, Utils.currentDate())
-                .set(db.userDateTime, Utils.currentDateTime())
-                .set(db.userDateTimez, Utils.currentDateTimez())
+                .set(db.userDate, LocalDate.now())
+                .set(db.userDateTime, LocalDateTime.now())
+                .set(db.userDateTimez, OffsetDateTime.now())
+                .set(db.userTimez, OffsetTime.now())
                 .store(db.users, cx);
 
         final var lr = new Record().set(db.userId, 1L);

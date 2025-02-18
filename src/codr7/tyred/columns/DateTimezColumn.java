@@ -12,7 +12,7 @@ public final class DateTimezColumn extends BaseColumn implements TypedColumn<Off
 
     @Override
     public String columnType() {
-        return "TIMESTAMP WITH TIME ZONE";
+        return "TIMESTAMP(9) WITH TIME ZONE";
     }
 
     @Override

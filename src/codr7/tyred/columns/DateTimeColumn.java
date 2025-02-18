@@ -12,7 +12,7 @@ public final class DateTimeColumn extends BaseColumn implements TypedColumn<Loca
 
     @Override
     public String columnType() {
-        return "TIMESTAMP";
+        return "TIMESTAMP(9)";
     }
 
     @Override
