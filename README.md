@@ -138,7 +138,7 @@ public class Calendar extends Model {
 ### Transactions
 Transactions support nesting to unlimited depth. Nested transactions
 establish save points. The outer transaction is automatically started when
-a context is created, and restarted when committed/rolled back.
+a context is created, and restarted after commit/rollback.
 
 ```java
 var db = new Database();
@@ -146,12 +146,20 @@ var cx = new Context("test", "test", "test");
 
 var r = new Resource(db);
 r.setName("foo").store(cx);
-cx.commit(); // Record committed to database
 
-cx.begin(); // Start nested transaction
+// Commit record to database
+cx.commit();
+
+// Start nested transaction
+cx.begin();
+
 r.setName("bar").store(cx);
-cx.commit(); // Save point released
-cx.rollback(); // Changes rolled back
+
+// Commit save point
+cx.commit();
+
+// Undo entire transaction including changes
+cx.rollback();
 ```
 
 ```java
@@ -160,10 +168,18 @@ var cx = new Context("test", "test", "test");
 
 var r = new Resource(db);
 r.setName("foo").store(cx);
-cx.commit(); // Record committed to database
 
-cx.begin(); // Start nested transaction
+// Commit record to database
+cx.commit();
+
+// Start nested transaction
+cx.begin();
+
 r.setName("bar").store(cx);
-cx.rollback(); // Save point rolled back
-cx.commit(); // No changes are committed
+
+// Undo save point changes
+cx.rollback();
+
+// Commit transaction excluding changes
+cx.commit();
 ```
