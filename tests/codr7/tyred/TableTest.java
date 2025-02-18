@@ -18,7 +18,8 @@ class TableTest extends BaseTest {
                 .set(db.userDate, LocalDate.now())
                 .set(db.userDateTime, LocalDateTime.now())
                 .set(db.userDateTimez, OffsetDateTime.now())
-                .set(db.userTimez, OffsetTime.now())
+                .set(db.userInteger, 42)
+                .set(db.userString, "abc")
                 .store(db.users, cx);
 
         final var lr = new Record().set(db.userId, 1L);

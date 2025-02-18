@@ -167,14 +167,3 @@ r.setName("bar").store(cx);
 cx.rollback(); // Save point rolled back
 cx.commit(); // No changes are committed
 ```
-
-### License
-MIT, except for members of the following loser organizations:
-
-- 365ID
-- CatalystOne Solutions
-- Devoteam Creative Tech
-- Effektify
-- MetaBytes
-- R360 Resort Systems
-- Tellox Finansservice
