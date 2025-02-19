@@ -13,6 +13,14 @@ public interface Column extends Comparable<Column> {
         return nameSql();
     }
 
+    default Object decode(Object value) {
+        return value;
+    }
+
+    default Object encode(Object value) {
+        return value;
+    }
+
     default boolean equal(final Object l, final Object r) {
         return l.equals(r);
     }

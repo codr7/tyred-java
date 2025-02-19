@@ -16,7 +16,7 @@ public final class Record {
 
         for (final var c: columns.toArray(Column[]::new)) {
             try {
-                setObject(c, source.getObject(i));
+                setObject(c, c.decode(source.getObject(i)));
                 i++;
             } catch (final SQLException e) {
                 throw new RuntimeException(e);

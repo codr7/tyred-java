@@ -17,20 +17,12 @@ public interface TableColumn extends Column, TableDefinition {
         return sql;
     }
 
-    default Object decode(Object value) {
-        return value;
-    }
-
     @Override
     default String definitionType() {
         return "COLUMN";
     }
 
     TableColumn dup(Table table, String name, Option...options);
-
-    default Object encode(Object value) {
-        return value;
-    }
 
     @Override
     default boolean exists(final Context cx) {
