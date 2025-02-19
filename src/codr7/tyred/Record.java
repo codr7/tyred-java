@@ -11,14 +11,17 @@ public final class Record {
 
     public Record() {}
 
-    public Record(final ResultSet source, final Column...columns) {
-        for (var i = 1; i < columns.length; i++) {
+    public Record(final ResultSet source, final Stream<Column> columns) {
+        var i = 1;
+
+        for (final var c: columns.toArray(Column[]::new)) {
             try {
-                setObject(columns[i], source.getObject(i));
+                setObject(c, source.getObject(i));
+                i++;
             } catch (final SQLException e) {
                 throw new RuntimeException(e);
             }
-        }
+        };
     }
 
     @Override

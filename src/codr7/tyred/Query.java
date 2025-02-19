@@ -25,15 +25,15 @@ public class Query implements Source {
         this.from = from;
     }
 
-    public Record[] findAll(final Context cx) {
+    public Stream<Record> findAll(final Context cx) {
         try (final var q = cx.query(sourceSql(), sourceParams().toArray(Object[]::new))) {
             final var rs = new ArrayList<Record>();
 
             while (q.next()) {
-                rs.add(new Record(q, select.toArray(Column[]::new)));
+                rs.add(new Record(q, select.stream()));
             }
 
-            return rs.toArray(Record[]::new);
+            return rs.stream();
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
