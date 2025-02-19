@@ -100,7 +100,7 @@ public class Table extends BaseDefinition implements Definition, Source {
     }
 
     public boolean exists(final Condition c, final Context cx) {
-        try (final var q = cx.query("SELECT EXISTS (SELECT NULL FROM " + Utils.quote(name()) + " WHERE " + c.sql() + ')', c.params())) {
+        try (final var q = cx.query("SELECT EXISTS (SELECT NULL FROM " + Utils.quote(name()) + " WHERE " + c.sql() + ')', c._params())) {
             q.next();
             return q.getBoolean(1);
         } catch (final SQLException e) {
@@ -115,7 +115,7 @@ public class Table extends BaseDefinition implements Definition, Source {
     public ResultSet find(final Condition w, final Context cx) {
         return cx.query("SELECT " +
                 columns.stream().map(TableColumn::nameSql).collect(Collectors.joining(", ")) +
-                " FROM " + Utils.quote(name()) + " WHERE " + w.sql(), w.params());
+                " FROM " + Utils.quote(name()) + " WHERE " + w.sql(), w._params());
     }
 
     public void load(final Record r, final ResultSet q, int i) {
@@ -139,7 +139,7 @@ public class Table extends BaseDefinition implements Definition, Source {
 
         try (final var q = find(w, cx)) {
             if (!q.next()) {
-                throw new RuntimeException("Record not found: " + name() + '/' + Arrays.toString(w.params()));
+                throw new RuntimeException("Record not found: " + name() + '/' + Arrays.toString(w._params()));
             }
 
             load(r, q, 1);
@@ -227,7 +227,7 @@ public class Table extends BaseDefinition implements Definition, Source {
                         collect(Collectors.joining(", ")) +
                 " WHERE " + wc.sql();
 
-        final var ps = Stream.concat(cs.stream().map(Pair::right), wc.paramStream()).toArray(Object[]::new);
+        final var ps = Stream.concat(cs.stream().map(Pair::right), wc.params()).toArray(Object[]::new);
         cx.exec(sql, ps);
 
         for (final var h : afterUpdate) {

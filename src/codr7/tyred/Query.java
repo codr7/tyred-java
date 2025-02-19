@@ -80,7 +80,7 @@ public class Query implements Source {
                 Stream.concat(
                         from.sourceParams(),
                         Stream.concat(
-                            (where.isEmpty()) ? Stream.empty() : where().paramStream(),
+                            (where.isEmpty()) ? Stream.empty() : where().params(),
                             orderBy.stream().flatMap(o -> o.left().columnParams()))));
     }
 

@@ -6,7 +6,7 @@ public record Join(Source left, Source right, Condition on) implements Source {
     @Override
     public Stream<Object> sourceParams() {
         return Stream.concat(left.sourceParams(),
-                Stream.concat(right.sourceParams(), on.paramStream()));
+                Stream.concat(right.sourceParams(), on.params()));
     }
 
     @Override

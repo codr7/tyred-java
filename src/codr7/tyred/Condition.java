@@ -3,7 +3,7 @@ package codr7.tyred;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public record Condition(String sql, Object... params) {
+public record Condition(String sql, Object... _params) {
     public static Condition fromColumnValues(final Stream<Pair<Column, Object>> csv) {
         return Condition.AND(csv.map(cv -> {
             final var v = cv.right();
@@ -36,10 +36,10 @@ public record Condition(String sql, Object... params) {
     }
 
     public Condition AND(final Condition c) {
-        return new Condition(sql + " AND " + c.sql, Utils.concat(params, c.params));
+        return new Condition(sql + " AND " + c.sql, Utils.concat(_params, c._params));
     }
 
-    public Stream<Object> paramStream() {
-        return Arrays.stream(params);
+    public Stream<Object> params() {
+        return Arrays.stream(_params);
     }
 }
