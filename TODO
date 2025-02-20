@@ -1,8 +1,6 @@
 * document exists/create/drop/migrate
-** add possibility to attach custom actions
-*** onCreate/onDrop/onMigrate events
-
-* document isModified/isStored
+** add custom ddl events
+*** afterCreate/afterDrop
 
 * query test
 * query readme

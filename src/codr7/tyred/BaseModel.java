@@ -11,8 +11,8 @@ public abstract class BaseModel implements Model {
         return tables().anyMatch(t -> record.isModified(t, cx));
     }
 
-    public boolean isStored(final Context cx) {
-        return tables().allMatch(t -> record.isStored(t, cx));
+    public boolean exists(final Context cx) {
+        return tables().allMatch(t -> record.exists(t, cx));
     }
 
     public final Record record() {

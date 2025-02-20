@@ -44,23 +44,23 @@ class ModelTest extends BaseTest {
 
         final var u = new User(db, cx);
         u.setString("foo");
-        assertFalse(u.isStored(cx));
+        assertFalse(u.exists(cx));
         assertTrue(u.isModified(cx));
 
         u.store(cx);
-        assertTrue(u.isStored(cx));
+        assertTrue(u.exists(cx));
         assertFalse(u.isModified(cx));
 
         u.setString("bar");
-        assertTrue(u.isStored(cx));
+        assertTrue(u.exists(cx));
         assertTrue(u.isModified(cx));
 
         u.store(cx);
-        assertTrue(u.isStored(cx));
+        assertTrue(u.exists(cx));
         assertFalse(u.isModified(cx));
 
         cx.rollback();
-        assertFalse(u.isStored(cx));
+        assertFalse(u.exists(cx));
         assertTrue(u.isModified(cx));
     }
 }

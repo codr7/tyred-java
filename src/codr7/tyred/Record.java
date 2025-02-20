@@ -54,6 +54,10 @@ public final class Record {
         return false;
     }
 
+    public boolean exists(final Table t, final Context cx) {
+        return t.primaryKey().columns().allMatch(c -> cx.storedValue(this, c) != null);
+    }
+
     public Stream<Map.Entry<Column, Object>> fields() {
         return fields.entrySet().stream();
     }
@@ -93,10 +97,6 @@ public final class Record {
         });
     }
 
-    public boolean isStored(final Table t, final Context cx) {
-        return t.primaryKey().columns().allMatch(c -> cx.storedValue(this, c) != null);
-    }
-
     public <T> Record set(final TypedColumn<T> c, T v) {
         fields.put(c, v);
         return this;
@@ -116,7 +116,7 @@ public final class Record {
     }
 
     public Record store(final Table t, final Context cx) {
-        if (isStored(t, cx)) {
+        if (exists(t, cx)) {
             t.update(this, cx);
         } else {
             t.insert(this, cx);

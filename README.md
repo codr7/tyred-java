@@ -1,16 +1,16 @@
-## Typed Relational Database access in Java
+# Typed Relational Database access in Java
 
-### Introduction
+## Introduction
 This project is part of the [tyred](https://github.com/codr7/tyred) family of frameworks.
 
-### Database Support
+## Database Support
 The framework is built on top of JDBC and uses standard SQL, 
 which makes it relatively database agnostic. Many features are optional,
 if you don't use them, the database isn't required to support them.
 
 So far, it has been tested with [H2](https://www.h2database.com/).
 
-### Schemas
+## Schemas
 The following example defines a simple database schema consisting of resources and calendars
 to track availability in time.
 
@@ -35,33 +35,33 @@ public class Database extends Schema {
 }
 ```
 
-### Migrations
+## Definitions
 All definitions support the following operations.
 
-#### create
+### create
 `create` attempts to create the definition and signals an error if it already exists.
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 db.create(cx);
 cx.commit();
 ```
 
-#### drop
+### drop
 `drop` attempts to drop the definition and signals an error if it doesn't exist.
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 db.drop(cx);
 cx.commit();
 ```
 
-#### exists
+### exists
 `exists` returns `true` if the definition already exists, otherwise `false`.
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 
@@ -70,20 +70,23 @@ if (!db.users.exists(cx)) {
 }
 ```
 
-#### migrate
+### migrate
 `migrate` creates the definition if it doesn't already exist,
 otherwise it drills down and calls migrate recursively,
 adding missing columns/constraints/indexes to tables etc.
 
-```
+```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
 db.migrate(cx);
 cx.commit();
 ```
 
-### Records
+## Records
 A record maps columns to values, columns may belong to different tables.
+
+### State
+Records support interrogation of their state.
 
 ```java
 var db = new Database();
@@ -93,7 +96,35 @@ r.set(db.resourceName, "foo");
 r.store(db.resources, cx);
 ```
 
-### Models
+`exists` returns true if the record exists in the specified table.
+
+```java
+var db = new Database();
+var cx = new Context("test", "test", "test");
+
+var r = new Record();
+r.set(db.resourceName, "foo");
+
+if (!r.exists(db.resources, cx)) {
+    r.store(db.resources, cx);
+}
+```
+
+`isModified` returns true if the contains modifications for the specified table.
+
+```java
+var db = new Database();
+var cx = new Context("test", "test", "test");
+
+var r = new Record();
+r.set(db.resourceName, "foo");
+
+if (r.isModified(db.resources, cx)) {
+    r.store(db.resources, cx);
+}
+```
+
+## Models
 A model encapsulates a record, which may contain columns from multiple tables.
 
 ```java
@@ -126,6 +157,7 @@ public class Resource extends Model {
     }
 }
 ```
+
 ```java
 public class Calendar extends Model {
     public Calendar(final Resource rc) {
@@ -182,7 +214,34 @@ public class Calendar extends Model {
 }
 ```
 
-### Transactions
+### State
+Like records, models support interrogation of their state.
+
+`exists` returns true if the record exists in all dependent tables, otherwise false.
+
+```java
+var db = new Database();
+var cx = new Context("test", "test", "test");
+var r = new Resource(db).setName("foo");
+
+if (!r.exists(cx)) {
+  store(cx);
+}
+```
+
+`isModified` returns true if the record contains modifications for any dependent table, otherwise false.
+
+```java
+var db = new Database();
+var cx = new Context("test", "test", "test");
+var r = new Resource(db).setName("foo");
+
+if (r.isModified(cx)) {
+  store(cx);
+}
+```
+
+## Transactions
 Transactions support nesting to unlimited depth. Nested transactions
 establish save points. The outer transaction is automatically started when
 a context is created, and restarted after commit/rollback.
@@ -190,9 +249,7 @@ a context is created, and restarted after commit/rollback.
 ```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
-
-var r = new Resource(db);
-r.setName("foo").store(cx);
+var r = new Resource(db).setName("foo").store(cx);
 
 // Commit record to database
 cx.commit();
@@ -212,9 +269,7 @@ cx.rollback();
 ```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
-
-var r = new Resource(db);
-r.setName("foo").store(cx);
+var r = new Resource(db).setName("foo").store(cx);
 
 // Commit record to database
 cx.commit();
