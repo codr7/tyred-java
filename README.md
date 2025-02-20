@@ -10,8 +10,8 @@ if you don't use them, the database isn't required to support them.
 
 So far, it has been tested with [H2](https://www.h2database.com/).
 
-### Definition
-The following example defines a simple database consisting of resources and calendars
+### Schemas
+The following example defines a simple database schema consisting of resources and calendars
 to track availability in time.
 
 ```java
@@ -33,6 +33,53 @@ public class Database extends Schema {
         });
     }
 }
+```
+
+### Migrations
+All definitions support the following operations.
+
+#### create
+`create` attempts to create the definition and signals an error if it already exists.
+
+```
+var db = new Database();
+var cx = new Context("test", "test", "test");
+db.create(cx);
+cx.commit();
+```
+
+#### drop
+`drop` attempts to drop the definition and signals an error if it doesn't exist.
+
+```
+var db = new Database();
+var cx = new Context("test", "test", "test");
+db.drop(cx);
+cx.commit();
+```
+
+#### exists
+`exists` returns `true` if the definition already exists, otherwise `false`.
+
+```
+var db = new Database();
+var cx = new Context("test", "test", "test");
+
+if (!db.users.exists(cx)) {
+  db.users.create(cx);
+}
+```
+
+#### migrate
+`migrate` creates the definition if it doesn't already exist,
+otherwise it drills down and calls migrate recursively,
+adding missing columns/constraints/indexes to tables etc.
+
+```
+var db = new Database();
+var cx = new Context("test", "test", "test");
+db.migrate(cx);
+cx.commit();
 ```
 
 ### Records

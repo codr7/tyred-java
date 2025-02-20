@@ -1,2 +1,8 @@
+* document exists/create/drop/migrate
+** add possibility to attach custom actions
+*** onCreate/onDrop/onMigrate events
+
+* document isModified/isStored
+
 * query test
 * query readme
