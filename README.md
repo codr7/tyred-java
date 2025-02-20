@@ -1,7 +1,7 @@
 # tyred-java
 
 ## Introduction
-This project is part of the [tyred](https://github.com/codr7/tyred) family of frameworks.
+This project implements the [tyred](https://github.com/codr7/tyred) framework in Java.
 
 ## Database Support
 The framework is built on top of JDBC and uses standard SQL, 
