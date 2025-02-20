@@ -85,9 +85,6 @@ cx.commit();
 ## Records
 A record maps columns to values, columns may belong to different tables.
 
-### State
-Records support interrogation of their state.
-
 ```java
 var db = new Database();
 var cx = new Context("test", "test", "test");
@@ -96,7 +93,10 @@ r.set(db.resourceName, "foo");
 r.store(db.resources, cx);
 ```
 
-`exists` returns true if the record exists in the specified table.
+### State
+Records support interrogation of their state.
+
+`exists` returns true if the record already exists in the specified table.
 
 ```java
 var db = new Database();
@@ -110,7 +110,7 @@ if (!r.exists(db.resources, cx)) {
 }
 ```
 
-`isModified` returns true if the contains modifications for the specified table.
+`isModified` returns true if the record contains modifications for the specified table.
 
 ```java
 var db = new Database();
@@ -125,7 +125,7 @@ if (r.isModified(db.resources, cx)) {
 ```
 
 ## Models
-A model encapsulates a record, which may contain columns from multiple tables.
+A model encapsulates a record.
 
 ```java
 public class Resource extends Model {
@@ -217,7 +217,7 @@ public class Calendar extends Model {
 ### State
 Like records, models support interrogation of their state.
 
-`exists` returns true if the record exists in all dependent tables, otherwise false.
+`exists` returns `true` if the model already exists in all dependent tables, otherwise `false`.
 
 ```java
 var db = new Database();
@@ -229,7 +229,7 @@ if (!r.exists(cx)) {
 }
 ```
 
-`isModified` returns true if the record contains modifications for any dependent table, otherwise false.
+`isModified` returns `true` if the model contains modifications for any dependent table, otherwise `false`.
 
 ```java
 var db = new Database();
