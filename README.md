@@ -1,4 +1,4 @@
-# Typed Relational Database access in Java
+# tyred-java
 
 ## Introduction
 This project is part of the [tyred](https://github.com/codr7/tyred) family of frameworks.
