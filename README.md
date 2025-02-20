@@ -71,7 +71,7 @@ if (!db.users.exists(cx)) {
 ```
 
 ### migrate
-`migrate` creates the definition if it doesn't already exist,
+`migrate` creates the definition if it doesn't already exist;
 otherwise it drills down and calls migrate recursively,
 adding missing columns/constraints/indexes to tables etc.
 
