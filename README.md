@@ -39,7 +39,7 @@ public class Database extends Schema {
 All definitions support the following operations.
 
 ### create
-`create` attempts to create the definition and signals an error if it already exists.
+`create` attempts to recursively create the definition and signals an error if it already exists.
 
 ```java
 var db = new Database();
@@ -49,7 +49,7 @@ cx.commit();
 ```
 
 ### drop
-`drop` attempts to drop the definition and signals an error if it doesn't exist.
+`drop` attempts to recursively drop the definition and signals an error if it doesn't exist.
 
 ```java
 var db = new Database();
@@ -118,8 +118,9 @@ var cx = new Context("test", "test", "test");
 
 var r = new Record();
 r.set(db.resourceName, "foo");
+r.store();
 
-if (r.isModified(db.resources, cx)) {
+if (r.set(db.resourceName, "bar").isModified(db.resources, cx)) {
     r.store(db.resources, cx);
 }
 ```
@@ -236,7 +237,7 @@ var db = new Database();
 var cx = new Context("test", "test", "test");
 var r = new Resource(db).setName("foo");
 
-if (r.isModified(cx)) {
+if (r.setName("bar").isModified(cx)) {
   store(cx);
 }
 ```
@@ -256,7 +257,6 @@ cx.commit();
 
 // Start nested transaction
 cx.begin();
-
 r.setName("bar").store(cx);
 
 // Commit save point
@@ -276,7 +276,6 @@ cx.commit();
 
 // Start nested transaction
 cx.begin();
-
 r.setName("bar").store(cx);
 
 // Undo save point changes
