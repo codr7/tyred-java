@@ -284,3 +284,6 @@ cx.rollback();
 // Commit transaction excluding changes
 cx.commit();
 ```
+
+### Work
+Should you find yourself involved in a software project with interesting non-GenAI challenges and in need a creative developer/tech/team lead with 40 years of solid experience from different technologies/roles/companies/countries, don't hesitate to get in [touch](mailto:codr7@protonmail.com).
